@@ -3,9 +3,9 @@ import Hero from "@/components/Hero";
 import CtaButton from "@/components/CtaButton";
 
 export const metadata: Metadata = {
-  title: "AI + Recruiter — Get Matched Faster | CareerAccel.ai",
+  title: "AI + Recruiter — AI Job Matching & Resume Distribution | CareerAccel.ai",
   description:
-    "Combine AI-powered job matching with real recruiter support to land your next role faster.",
+    "AI-matched job leads plus active resume distribution to our recruiter network, with a dedicated recruiter contact for your search.",
 };
 
 const CAMPAIGN = "ai_recruiter";
@@ -18,11 +18,11 @@ const FEATURES = [
   },
   {
     title: "A real recruiter in your corner",
-    body: "Get paired with a human recruiter who advocates for you, preps you for interviews, and pushes your application forward.",
+    body: "Your resume is actively distributed to recruiters in our network, and you get a dedicated recruiter contact for your search.",
   },
   {
-    title: "Faster time-to-offer",
-    body: "Candidates using AI + Recruiter together move through the pipeline faster than either tool alone.",
+    title: "Broader recruiter reach",
+    body: "AI-matched leads and active resume distribution work together, putting your resume in front of more recruiters than applying on your own.",
   },
 ];
 
@@ -31,8 +31,8 @@ export default function AiRecruiterPage() {
     <main className="flex flex-1 flex-col">
       <Hero
         eyebrow="AI + Recruiter"
-        headline="AI finds the roles. A recruiter gets you hired."
-        subheadline="CareerAccel pairs smart job matching with dedicated recruiter support, so you spend less time searching and more time interviewing."
+        headline="AI-matched roles. Your resume, actively distributed to recruiters."
+        subheadline="CareerAccel combines AI job matching with active resume distribution to our recruiter network, plus a dedicated recruiter contact for your search."
         ctaLabel="Get Matched Free"
         ctaDestinationPath={CTA_DESTINATION}
         campaign={CAMPAIGN}
@@ -53,10 +53,11 @@ export default function AiRecruiterPage() {
 
       <section className="mx-auto flex w-full max-w-3xl flex-col items-center px-6 pb-24 text-center">
         <h2 className="text-2xl font-bold text-zinc-900">
-          Ready to move faster?
+          Ready to expand your reach?
         </h2>
         <p className="mt-3 max-w-lg text-zinc-600">
-          Sign up free and get matched with roles and a recruiter today.
+          Sign up free for AI-matched roles and active resume distribution to
+          our recruiter network.
         </p>
         <div className="mt-8">
           <CtaButton
