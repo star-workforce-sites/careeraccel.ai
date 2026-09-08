@@ -13,7 +13,7 @@ const GOOGLE_ADS_ID = process.env.NEXT_PUBLIC_GOOGLE_ADS_ID;
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col bg-[var(--bg)] text-[var(--text)]">
+      <body className="min-h-full flex flex-col bg-white text-zinc-900">
         {children}
 
         {META_PIXEL_ID && (

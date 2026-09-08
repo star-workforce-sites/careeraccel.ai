@@ -1,23 +1,164 @@
 @import "tailwindcss";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
 
 /*
- * This is a fixed-light-theme marketing landing page -- it should look the
- * same regardless of the visitor's OS/browser dark-mode setting. There is
- * intentionally no `prefers-color-scheme: dark` handling here: an earlier
- * version had one, and because Tailwind v4 utilities live in a cascade
- * layer, that unlayered override beat `bg-white`/`text-zinc-900` on body
- * whenever a visitor's system was in dark mode, producing dark-on-dark,
- * unreadable text. Body's actual colors are set via Tailwind classes in
- * app/layout.tsx (`bg-white text-zinc-900`) -- don't reintroduce a plain
- * `body { background / color }` rule here, it will win over them again.
+ * Design tokens for the careeraccel.ai microsite. Every landing page shares
+ * this file, so a change here (or to Hero / CtaButton / FeatureCard) applies
+ * to every current and future campaign page automatically -- that's the
+ * point, per PROJECT_CONTEXT.md.
+ *
+ * This is a fixed-theme (dark) marketing page -- it does NOT respond to
+ * visitor OS/browser color-scheme. An earlier version of this file had a
+ * `prefers-color-scheme: dark` block that fought with Tailwind's utility
+ * classes (Tailwind v4 utilities live in a cascade layer; a plain unlayered
+ * rule here always wins over them regardless of specificity) and produced
+ * unreadable dark-on-dark text. Don't reintroduce a `prefers-color-scheme`
+ * block, and don't add plain `body { background / color }` rules outside
+ * this token system -- set colors via the classes/vars below instead.
+ *
+ * Fonts are self-hosted via @fontsource (imported above) rather than
+ * next/font/google: this sandbox's network egress blocks
+ * fonts.googleapis.com outright, so a next/font/google build couldn't be
+ * verified from here. @fontsource ships the font files as local npm
+ * package assets -- no runtime network call, verified working in this
+ * environment, and identical behavior in dev/build/production.
  */
 
+:root {
+  --bg: #07070b;
+  --bg-elevated: #0e0e16;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+
+  --text: #f4f4f7;
+  --text-muted: #9a9cae;
+  --text-faint: #6b6d80;
+
+  --accent: #8b7bff;
+  --accent-2: #4f8cff;
+  --accent-soft: rgba(139, 123, 255, 0.14);
+  --accent-border: rgba(139, 123, 255, 0.35);
+  --accent-glow: rgba(139, 123, 255, 0.35);
+
+  --gradient-accent: linear-gradient(135deg, var(--accent-2), var(--accent));
+}
+
 @theme inline {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-    Arial, sans-serif;
+  --font-display: "Space Grotesk", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface: var(--surface);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
 }
 
 body {
   font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* Mesh background used behind the hero of every landing page. Pure CSS
+   (radial gradients + a faint grid), no images/canvas -- cheap to render
+   and cheap to keep as new pages are added. */
+.mesh-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+      45% 35% at 20% 15%,
+      rgba(139, 123, 255, 0.22),
+      transparent 70%
+    ),
+    radial-gradient(40% 30% at 85% 20%, rgba(79, 140, 255, 0.16), transparent 70%),
+    radial-gradient(50% 40% at 50% 100%, rgba(139, 123, 255, 0.1), transparent 70%);
+  filter: blur(40px);
+}
+
+.mesh-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 90%);
+}
+
+.gradient-text {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glow-border {
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.card-elevated {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.card-elevated:hover {
+  transform: translateY(-4px);
+  background: var(--surface-hover);
+  border-color: var(--accent-border);
+  box-shadow: 0 12px 40px -12px var(--accent-glow);
+}
+
+/* Entrance animation -- subtle, respects reduced-motion. */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+  }
+  .card-elevated {
+    transition: none;
+  }
 }

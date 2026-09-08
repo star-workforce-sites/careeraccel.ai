@@ -57,38 +57,11 @@ headline tweak. Full isolation removes that risk.
   contact); never what it *guarantees will happen as a result*. This is a
   standing rule for every current and future page, not a one-time fix.
 
-## Design system
-
-The microsite has a real visual identity, defined once and shared by every
-page — don't hand-roll colors/type/spacing on a new page, use these:
-
-- **Tokens** live in `app/globals.css` as CSS custom properties (`--bg`,
-  `--accent`, `--text-muted`, `--gradient-accent`, etc.) plus a few reusable
-  classes: `.mesh-bg` (the gradient/grid hero background), `.gradient-text`
-  (accent-gradient text), `.card-elevated` (card background/border/hover
-  elevation + glow), `.animate-fade-in-up` (entrance animation, respects
-  `prefers-reduced-motion`).
-- **Fonts:** Space Grotesk (display/headlines) + Inter (body/UI), self-hosted
-  via `@fontsource` npm packages, imported at the top of `globals.css`. Not
-  `next/font/google` — see the comment in `globals.css` for why (this repo's
-  dev sandbox couldn't reach `fonts.googleapis.com` to verify it, so a fully
-  self-hosted, network-independent approach was used instead).
-- **Theme:** fixed dark theme (near-black background, violet/blue accent
-  gradient) — does not respond to visitor OS/browser color-scheme. Don't
-  reintroduce a `prefers-color-scheme` block or a plain `body { background }`
-  rule outside the token system (see the contrast-bug history below).
-- **Components:** `Hero.tsx` (mesh background, eyebrow badge, optional
-  gradient-highlighted headline substring via `headlineHighlight`, staggered
-  entrance animation), `FeatureCard.tsx` (icon + elevated card), `CtaButton`
-  (gradient pill, hover scale/glow — UTM/tracking logic unchanged).
-
 ## Adding the next landing page
 
 1. Add a new route under `app/<feature-slug>/page.tsx` (see
    `app/ai-recruiter/page.tsx` as the template).
-2. Use `Hero` + `FeatureCard` + `CtaButton` with a unique `campaign` string —
-   they pull the shared design tokens automatically, so a new page inherits
-   the visual identity without redoing any styling.
+2. Use `Hero` + `CtaButton` with a unique `campaign` string.
 3. Point `ctaDestinationPath` at the right main-app URL (`/auth/register` or
    a specific plan/checkout deep link).
 4. No middleware or pixel changes needed — both are already global.
@@ -112,28 +85,9 @@ page — don't hand-roll colors/type/spacing on a new page, use these:
   root `/` redirect were intentionally left untouched — out of scope for
   this fix.
 - **Dark-on-dark contrast fix:** a leftover `prefers-color-scheme: dark`
-  block in `app/globals.css` was overriding the page's then-fixed *light*
-  theme for visitors with OS dark mode on, due to Tailwind v4's
-  cascade-layer behavior. Removed at the time; superseded by the visual
-  redesign below, which intentionally makes the page dark-themed by design
-  (not visitor-driven) — same underlying rule still applies: no
-  `prefers-color-scheme` blocks, set colors via the token system only.
-- **Visual design refresh:** replaced the generic white/Tailwind-default
-  look with a real visual identity — dark near-black background with a
-  violet/blue gradient mesh + subtle grid behind the hero, Space Grotesk
-  (self-hosted via `@fontsource`, not `next/font/google` — see "Design
-  system" above) paired with Inter, a gradient-highlighted phrase in the
-  headline, icon-bearing elevated feature cards with hover lift/glow,
-  gradient CTA buttons with hover scale, and a staggered fade-in-up entrance
-  animation (reduced-motion respected). Copy itself was not changed — same
-  words as the compliance fix above, just restyled. All of it lives in
-  shared tokens/components (`globals.css`, `Hero.tsx`, `FeatureCard.tsx`,
-  `CtaButton.tsx`), so the next 4 planned landing pages inherit it
-  automatically rather than starting from scratch. Architecture (one page
-  per feature/campaign, root redirects to the main app) was confirmed
-  correct and intentionally left unchanged — this was a visual-only pass.
-  Verified with a full `next build` + a rendered screenshot of the live
-  page (not just code review).
+  block in `app/globals.css` was overriding the page's fixed light theme
+  for visitors with OS dark mode on, due to Tailwind v4's cascade-layer
+  behavior. Removed; page is now light-theme regardless of visitor setting.
 
 ## Deploy
 

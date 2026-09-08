@@ -22,7 +22,7 @@ function readVariantCookie(): string {
 
 /**
  * The single shared CTA component every landing page must use. Centralizing
- * it here means UTM + variant params can never be forgotten on a new page --
+ * it here means UTM + variant params can never be forgotten on a new page —
  * see careeraccel.ai project handoff, section 7.
  */
 export default function CtaButton({
@@ -54,15 +54,7 @@ export default function CtaButton({
       }}
       className={
         className ??
-        "group relative inline-flex items-center justify-center overflow-hidden rounded-full px-8 py-4 font-[family-name:var(--font-display)] text-base font-semibold text-white transition-transform duration-200 ease-out hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
-      }
-      style={
-        className
-          ? undefined
-          : {
-              background: "var(--gradient-accent)",
-              boxShadow: "0 8px 30px -8px var(--accent-glow)",
-            }
+        "inline-flex items-center justify-center rounded-full bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700"
       }
     >
       {label}
